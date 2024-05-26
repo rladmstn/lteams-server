@@ -1,4 +1,4 @@
-package com.lck.server.common.enumerate;
+package com.lck.server.enumerate;
 
 import lombok.Getter;
 

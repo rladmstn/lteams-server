@@ -1,4 +1,4 @@
-package com.lck.server.common.config;
+package com.lck.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

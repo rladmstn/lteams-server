@@ -2,7 +2,7 @@ package com.lck.server.post.domain;
 
 import java.time.LocalDateTime;
 
-import com.lck.server.common.enumerate.Team;
+import com.lck.server.enumerate.Team;
 import com.lck.server.user.domain.User;
 
 import jakarta.persistence.Column;
