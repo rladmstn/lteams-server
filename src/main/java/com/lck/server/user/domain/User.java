@@ -2,6 +2,8 @@ package com.lck.server.user.domain;
 
 import java.time.LocalDate;
 
+import com.lck.server.enumerate.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,15 +27,17 @@ public class User {
 	private String profileImage;
 	private Integer subscribedTeamCount;
 	private LocalDate nicknameChangeableDate;
+	private Role role;
 
 	@Builder
 	public User(String email, String password, String nickname, String profileImage, Integer subscribedTeamCount,
-		LocalDate nicknameChangeableDate) {
+		LocalDate nicknameChangeableDate, Role role) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.profileImage = profileImage;
 		this.subscribedTeamCount = subscribedTeamCount;
 		this.nicknameChangeableDate = nicknameChangeableDate;
+		this.role = role;
 	}
 }
