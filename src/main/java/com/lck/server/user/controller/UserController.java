@@ -43,4 +43,11 @@ public class UserController {
 		userService.checkEmailDuplicated(email);
 		return ResponseEntity.ok().body("OK");
 	}
+
+	@GetMapping(value = "/check-nickname")
+	@Operation(summary = "닉네임 중복 확인 API")
+	public ResponseEntity<Object> checkPassword(@RequestParam String nickname){
+		userService.checkNicknameDuplicated(nickname);
+		return ResponseEntity.ok().body("OK");
+	}
 }

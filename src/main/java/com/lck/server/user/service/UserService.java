@@ -34,4 +34,9 @@ public class UserService {
 		if(userRepository.existsByEmail(email))
 			throw new UserValidationException("이미 가입된 이메일 입니다.");
 	}
+
+	public void checkNicknameDuplicated(String nickname){
+		if(userRepository.existsByNickname(nickname))
+			throw new UserValidationException("이미 존재하는 닉네임 입니다.");
+	}
 }
