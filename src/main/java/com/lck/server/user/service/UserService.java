@@ -24,6 +24,7 @@ public class UserService {
 
 	public void register(RegisterRequest request, MultipartFile profileImage) {
 		checkEmailDuplicated(request.email());
+		checkNicknameDuplicated(request.nickname());
 		String imageUrl = imageService.saveImage(profileImage);
 		String encodedPassword = passwordEncoder.encode(request.password());
 		userRepository.save(request.toEntity(request.email(), encodedPassword, request.nickname(), imageUrl, Role.USER));
