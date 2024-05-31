@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -83,15 +84,14 @@ public class TokenProvider {
 				.build().parseClaimsJws(token);
 			return true;
 		} catch (SecurityException | MalformedJwtException e){
-			log.info("검증되지 않은 토큰입니다.");
+			throw new RuntimeException("검증되지 않은 토큰입니다.");
 		} catch (ExpiredJwtException e){
-			log.info("만료된 토큰입니다.");
+			throw new RuntimeException("만료된 토큰입니다.");
 		} catch (UnsupportedJwtException e){
-			log.info("지원하지 않는 형태의 토큰입니다.");
+			throw new RuntimeException("지원하지 않는 형태의 토큰입니다.");
 		} catch (IllegalArgumentException e){
-			log.info("토큰 정보가 비어있습니다.");
+			throw new RuntimeException("토큰 정보가 비어있습니다.");
 		}
-		return false;
 	}
 
 	private Claims parseClaims(String accessToken){
@@ -100,6 +100,12 @@ public class TokenProvider {
 			.build()
 			.parseClaimsJws(accessToken)
 			.getBody();
+	}
+
+	public String getUerEmail(String authToken){
+		String token = authToken.replace("Bearer","").trim();
+		Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+		return claimsJws.getBody().getSubject();
 	}
 
 }

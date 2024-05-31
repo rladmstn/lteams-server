@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lck.server.common.ValidatedUser;
 import com.lck.server.exception.RequestException;
+import com.lck.server.user.domain.User;
 import com.lck.server.user.dto.RegisterRequest;
 import com.lck.server.user.dto.SignInRequest;
 import com.lck.server.user.dto.SignInResponse;
@@ -61,5 +63,11 @@ public class UserController {
 			throw new RequestException("로그인 요청이 올바르지 않습니다.",errors);
 		SignInResponse response = userService.signIn(request);
 		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping(value = "/test")
+	@Operation(summary = "테스트 API")
+	public ResponseEntity<Object> test(@ValidatedUser User user){
+		return ResponseEntity.ok().body(user.getEmail());
 	}
 }

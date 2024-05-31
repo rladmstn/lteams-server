@@ -28,8 +28,6 @@ public class SpringSecurityConfig{
 		return security
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(auth -> auth
-				.anyRequest().authenticated())
 			.sessionManagement(sessionManagement ->
 				sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
