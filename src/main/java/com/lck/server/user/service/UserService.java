@@ -10,9 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lck.server.enumerate.Role;
 import com.lck.server.jwt.JwtDTO;
 import com.lck.server.jwt.TokenProvider;
+import com.lck.server.user.domain.User;
 import com.lck.server.user.dto.RegisterRequest;
 import com.lck.server.user.dto.SignInRequest;
 import com.lck.server.user.dto.SignInResponse;
+import com.lck.server.user.dto.UserInfoResponse;
 import com.lck.server.user.exception.UserValidationException;
 import com.lck.server.user.repository.UserRepository;
 
@@ -57,5 +59,9 @@ public class UserService {
 
 		JwtDTO token = tokenProvider.generateToken(authenticate);
 		return new SignInResponse(token.getAccessToken());
+	}
+
+	public UserInfoResponse getUserInfo(User user) {
+		return new UserInfoResponse(user.getEmail(), user.getNickname(), user.getProfileImage());
 	}
 }

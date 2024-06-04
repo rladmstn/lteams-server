@@ -18,6 +18,7 @@ import com.lck.server.user.domain.User;
 import com.lck.server.user.dto.RegisterRequest;
 import com.lck.server.user.dto.SignInRequest;
 import com.lck.server.user.dto.SignInResponse;
+import com.lck.server.user.dto.UserInfoResponse;
 import com.lck.server.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,6 +63,13 @@ public class UserController {
 		if(errors.hasErrors())
 			throw new RequestException("로그인 요청이 올바르지 않습니다.",errors);
 		SignInResponse response = userService.signIn(request);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping
+	@Operation(summary = "회원 정보 조회 API", description = "회원 이메일, 닉네임, 프로필 이미지 정보를 조회하는 API")
+	public ResponseEntity<UserInfoResponse> getUserInfo(@ValidatedUser User user){
+		UserInfoResponse response = userService.getUserInfo(user);
 		return ResponseEntity.ok().body(response);
 	}
 
