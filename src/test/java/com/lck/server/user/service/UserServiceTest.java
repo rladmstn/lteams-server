@@ -3,6 +3,8 @@ package com.lck.server.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lck.server.user.domain.User;
 import com.lck.server.user.dto.RegisterRequest;
+import com.lck.server.user.dto.UserInfoResponse;
 import com.lck.server.user.exception.UserValidationException;
 import com.lck.server.user.repository.UserRepository;
 
@@ -78,6 +81,20 @@ class UserServiceTest {
 		assertThatThrownBy(() -> userService.register(registerRequest,profileImage))
 			.isInstanceOf(UserValidationException.class)
 			.hasFieldOrPropertyWithValue("error", "이미 존재하는 닉네임 입니다.");
+	}
+
+	@Test
+	@DisplayName("회원 정보 조회 성공")
+	void getUserInfo(){
+		// given
+		User user = User.builder().email("email").nickname("nickname").password("encoded").profileImage("profileImage")
+			.nicknameChangeableDate(LocalDate.now()).subscribedTeamCount(0).build();
+		// when
+		UserInfoResponse response = userService.getUserInfo(user);
+		// then
+		assertThat(response.email()).isEqualTo("email");
+		assertThat(response.nickname()).isEqualTo("nickname");
+		assertThat(response.profileImage()).isEqualTo("profileImage");
 	}
 
 }
