@@ -2,6 +2,8 @@ package com.lck.server.user.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -41,5 +43,12 @@ public class ImageService {
 		}
 
 		return amazonS3.getUrl(bucket,fileName).toString();
+	}
+
+	public void deleteImage(String imageUrl){
+		String splitStr = ".com/";
+		String fileName = imageUrl.substring(imageUrl.lastIndexOf(splitStr) + splitStr.length());
+		String file = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+		amazonS3.deleteObject(bucket,file);
 	}
 }

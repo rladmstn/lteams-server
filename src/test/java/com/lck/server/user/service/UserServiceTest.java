@@ -97,4 +97,12 @@ class UserServiceTest {
 		assertThat(response.profileImage()).isEqualTo("profileImage");
 	}
 
+	@Test
+	@DisplayName("회원 정보 수정 성공")
+	void editUserInfo(){
+		// given
+		// when
+		// then
+	}
+
 }

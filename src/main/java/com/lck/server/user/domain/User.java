@@ -40,4 +40,12 @@ public class User {
 		this.nicknameChangeableDate = nicknameChangeableDate;
 		this.role = role;
 	}
+
+	public void editNickname(String nickname){
+		this.nickname = nickname;
+	}
+
+	public void editProfileImage(String profileImage){
+		this.profileImage = profileImage;
+	}
 }

@@ -64,4 +64,18 @@ public class UserService {
 	public UserInfoResponse getUserInfo(User user) {
 		return new UserInfoResponse(user.getEmail(), user.getNickname(), user.getProfileImage());
 	}
+
+	public void editUserInfo(User user, String nickname, MultipartFile profileImage) {
+		User targetUser = userRepository.findById(user.getId()).orElseThrow();
+		if(nickname != null && !nickname.isBlank())
+			targetUser.editNickname(nickname);
+		if(profileImage != null){
+			if(targetUser.getProfileImage() != null)
+				imageService.deleteImage(targetUser.getProfileImage());
+			String imageUrl = imageService.saveImage(profileImage);
+			targetUser.editProfileImage(imageUrl);
+		}
+		log.info("success to edit user info");
+	}
+
 }
