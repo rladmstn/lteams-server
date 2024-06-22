@@ -22,7 +22,6 @@ import com.lck.server.user.dto.SignInResponse;
 import com.lck.server.user.dto.UserInfoResponse;
 import com.lck.server.user.service.UserService;
 
-import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -75,10 +74,11 @@ public class UserController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@PatchMapping
+	@PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "회원 정보 수정 API", description = "닉네임, 프로필 이미지를 수정하는 API")
-	public ResponseEntity<Object> editUserInfo(@ValidatedUser User user, @Nullable @RequestParam String nickname, MultipartFile profileImage){
-		userService.editUserInfo(user,nickname,profileImage);
+	public ResponseEntity<Object> editUserInfo(@ValidatedUser User user,
+		@RequestParam(required = false) String nickname, @RequestPart(required = false) MultipartFile profileImage){
+		userService.editUserInfo(user, nickname, profileImage);
 		return ResponseEntity.ok().body("OK");
 	}
 
