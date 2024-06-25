@@ -15,6 +15,7 @@ import com.lck.server.user.dto.RegisterRequest;
 import com.lck.server.user.dto.SignInRequest;
 import com.lck.server.user.dto.SignInResponse;
 import com.lck.server.user.dto.UserInfoResponse;
+import com.lck.server.user.exception.UserPermissionException;
 import com.lck.server.user.exception.UserValidationException;
 import com.lck.server.user.repository.UserRepository;
 
@@ -78,4 +79,14 @@ public class UserService {
 		log.info("success to edit user info");
 	}
 
+	public void unregisterUser(User user, String password) {
+		checkPassword(user.getPassword(), password);
+		userRepository.delete(user);
+		log.info("success to unregister user");
+	}
+
+	private void checkPassword(String userPassword, String inputPassword){
+		if(!passwordEncoder.matches(inputPassword, userPassword))
+			throw new UserPermissionException("비밀번호가 일치하지 않습니다.");
+	}
 }

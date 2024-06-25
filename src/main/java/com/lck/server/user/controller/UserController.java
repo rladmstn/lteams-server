@@ -3,6 +3,7 @@ package com.lck.server.user.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +80,13 @@ public class UserController {
 	public ResponseEntity<Object> editUserInfo(@ValidatedUser User user,
 		@RequestParam(required = false) String nickname, @RequestPart(required = false) MultipartFile profileImage){
 		userService.editUserInfo(user, nickname, profileImage);
+		return ResponseEntity.ok().body("OK");
+	}
+
+	@DeleteMapping
+	@Operation(summary = "회원 탈퇴", description = "비밀번호 확인 후 회원 탈퇴하는 API")
+	public ResponseEntity<Object> unregisterUser(@ValidatedUser User user, @RequestParam String password){
+		userService.unregisterUser(user, password);
 		return ResponseEntity.ok().body("OK");
 	}
 

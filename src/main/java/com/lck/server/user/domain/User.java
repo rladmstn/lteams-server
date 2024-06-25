@@ -1,6 +1,9 @@
 package com.lck.server.user.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.SQLDelete;
 
 import com.lck.server.enumerate.Role;
 
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "update User set deleted_at = current_timestamp where id = ?")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +32,7 @@ public class User {
 	private Integer subscribedTeamCount;
 	private LocalDate nicknameChangeableDate;
 	private Role role;
+	private LocalDateTime deletedAt;
 
 	@Builder
 	public User(String email, String password, String nickname, String profileImage, Integer subscribedTeamCount,
@@ -39,6 +44,7 @@ public class User {
 		this.subscribedTeamCount = subscribedTeamCount;
 		this.nicknameChangeableDate = nicknameChangeableDate;
 		this.role = role;
+		this.deletedAt = null;
 	}
 
 	public void editNickname(String nickname){
