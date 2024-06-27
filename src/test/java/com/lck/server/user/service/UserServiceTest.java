@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lck.server.user.domain.User;
 import com.lck.server.user.dto.RegisterRequest;
 import com.lck.server.user.dto.UserInfoResponse;
+import com.lck.server.user.exception.UserPermissionException;
 import com.lck.server.user.exception.UserValidationException;
 import com.lck.server.user.repository.UserRepository;
 
@@ -121,4 +122,29 @@ class UserServiceTest {
 		assertThat(user.getNickname()).isEqualTo("newNickname");
 	}
 
+	@Test
+	@DisplayName("회원 탈퇴 성공")
+	void unregisterUser(){
+		// given
+		User user = User.builder().email("email").nickname("nickname").password("encoded").profileImage("profileImage")
+			.nicknameChangeableDate(LocalDate.now()).subscribedTeamCount(0).build();
+		when(passwordEncoder.matches("password",user.getPassword())).thenReturn(true);
+		// when
+		userService.unregisterUser(user,"password");
+		// then
+		verify(userRepository,times(1)).delete(user);
+	}
+
+	@Test
+	@DisplayName("회원 탈퇴 실패 : 비밀번호 불일치")
+	void unregisterUserFailedIncorrectPassword(){
+		User user = User.builder().email("email").nickname("nickname").password("encoded").profileImage("profileImage")
+			.nicknameChangeableDate(LocalDate.now()).subscribedTeamCount(0).build();
+		when(passwordEncoder.matches("incorrectPassword",user.getPassword())).thenReturn(false);
+		// when
+		assertThatThrownBy(() -> userService.unregisterUser(user,"incorrectPassword"))
+			.isInstanceOf(UserPermissionException.class)
+			.hasFieldOrPropertyWithValue("error","비밀번호가 일치하지 않습니다.");
+
+	}
 }
