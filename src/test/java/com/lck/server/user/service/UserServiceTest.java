@@ -3,7 +3,10 @@ package com.lck.server.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -99,10 +102,23 @@ class UserServiceTest {
 
 	@Test
 	@DisplayName("회원 정보 수정 성공")
-	void editUserInfo(){
+	void editUserInfo() throws NoSuchFieldException, IllegalAccessException {
 		// given
+		User user = User.builder().email("email").nickname("nickname").password("encoded").profileImage("profileImage")
+			.nicknameChangeableDate(LocalDate.now()).subscribedTeamCount(0).build();
+
+		Field userIdField = User.class.getDeclaredField("id");
+		userIdField.setAccessible(true);
+		userIdField.set(user,123L);
+
+		MockMultipartFile newProfileImage = new MockMultipartFile("newProfileImage",new byte[]{1,2,3,4});
+		when(imageService.saveImage(newProfileImage)).thenReturn("newProfileImage");
+		when(userRepository.findById(123L)).thenReturn(Optional.ofNullable(user));
 		// when
+		userService.editUserInfo(Objects.requireNonNull(user),"newNickname",newProfileImage);
 		// then
+		assertThat(user.getProfileImage()).isEqualTo("newProfileImage");
+		assertThat(user.getNickname()).isEqualTo("newNickname");
 	}
 
 }
