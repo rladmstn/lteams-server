@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.lck.server.post.exception.PostValidationException;
 import com.lck.server.user.exception.UserPermissionException;
 import com.lck.server.user.exception.UserValidationException;
 
@@ -21,6 +22,10 @@ public class CustomExceptionHandler {
 	}
 	@ExceptionHandler(UserPermissionException.class)
 	protected ResponseEntity<Object> handler(UserPermissionException e){
+		return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getError(), null));
+	}
+	@ExceptionHandler(PostValidationException.class)
+	protected ResponseEntity<Object> handler(PostValidationException e){
 		return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getError(), null));
 	}
 }

@@ -48,4 +48,8 @@ public class Post {
 		this.recommendCount = recommendCount;
 		this.createdTime = createdTime;
 	}
+
+	public void updateHitCount(){
+		this.hitCount++;
+	}
 }
