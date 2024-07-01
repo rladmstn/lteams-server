@@ -1,15 +1,21 @@
 package com.lck.server.post.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lck.server.common.ValidatedUser;
+import com.lck.server.enumerate.Team;
 import com.lck.server.exception.RequestException;
 import com.lck.server.post.dto.CreatePostRequest;
+import com.lck.server.post.dto.GetPostResponse;
 import com.lck.server.post.service.PostService;
 import com.lck.server.user.domain.User;
 
@@ -32,6 +38,13 @@ public class PostController {
 			throw new RequestException("게시글 작성 요청이 올바르지 않습니다.",errors);
 		postService.createPost(user, request);
 		return ResponseEntity.ok().body("OK");
+	}
+
+	@GetMapping("/list/{team}")
+	@Operation(summary = "게시글 목록을 조회하는 API")
+	public ResponseEntity<List<GetPostResponse>> getPostList(@PathVariable Team team){
+		List<GetPostResponse> response = postService.getPostList(team);
+		return ResponseEntity.ok(response);
 	}
 
 }
