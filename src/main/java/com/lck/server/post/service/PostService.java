@@ -11,6 +11,7 @@ import com.lck.server.post.dto.GetPostResponse;
 import com.lck.server.post.exception.PostValidationException;
 import com.lck.server.post.repository.PostRepository;
 import com.lck.server.user.domain.User;
+import com.lck.server.user.exception.UserValidationException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,18 @@ public class PostService {
 			.orElseThrow(() -> new PostValidationException("존재하지 않는 게시글 입니다."));
 		post.updateHitCount();
 		log.info("success to update hit count");
+	}
+
+	public void deletePost(User user, Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new PostValidationException("존재하지 않는 게시글 입니다."));
+		checkUserPermission(user,post,"delete");
+		postRepository.delete(post);
+		log.info("success to delete post");
+	}
+
+	private void checkUserPermission(User user, Post post, String permission){
+		if(!post.getUser().getId().equals(user.getId()))
+			throw new UserValidationException("게시글에 대한 "+ permission +" 권한이 없습니다.");
 	}
 }
