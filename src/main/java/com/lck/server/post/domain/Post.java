@@ -54,4 +54,5 @@ public class Post {
 	}
 	public void editTitle(String title) { this.title = title; }
 	public void editContent(String content) { this.content = content; }
+	public void updateRecommendCount(Integer cnt) { this.recommendCount += cnt; }
 }

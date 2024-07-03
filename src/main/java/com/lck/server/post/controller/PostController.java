@@ -20,6 +20,7 @@ import com.lck.server.exception.RequestException;
 import com.lck.server.post.dto.CreatePostRequest;
 import com.lck.server.post.dto.EditPostRequest;
 import com.lck.server.post.dto.GetPostResponse;
+import com.lck.server.post.dto.PostRecommendationResponse;
 import com.lck.server.post.service.PostService;
 import com.lck.server.user.domain.User;
 
@@ -73,6 +74,13 @@ public class PostController {
 	public ResponseEntity<Object> deletePost(@ValidatedUser User user, @RequestParam Long postId){
 		postService.deletePost(user, postId);
 		return ResponseEntity.ok().body("OK");
+	}
+
+	@PostMapping("/{postId}/recommend")
+	@Operation(summary = "게시글 추천/추천 취소 API")
+	public ResponseEntity<PostRecommendationResponse> updatePostRecommendation(@ValidatedUser User user, @PathVariable Long postId){
+		PostRecommendationResponse response = postService.updatePostRecommendation(user, postId);
+		return ResponseEntity.ok().body(response);
 	}
 
 }
