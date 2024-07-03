@@ -18,6 +18,7 @@ import com.lck.server.common.ValidatedUser;
 import com.lck.server.enumerate.Team;
 import com.lck.server.exception.RequestException;
 import com.lck.server.post.dto.CreatePostRequest;
+import com.lck.server.post.dto.EditPostRequest;
 import com.lck.server.post.dto.GetPostResponse;
 import com.lck.server.post.service.PostService;
 import com.lck.server.user.domain.User;
@@ -54,6 +55,16 @@ public class PostController {
 	@Operation(summary = "게시글 상세 조회 시, 조회수 올리는 API")
 	public ResponseEntity<Object> updatePostHitCount(@PathVariable Long postId){
 		postService.updatePostHitCount(postId);
+		return ResponseEntity.ok().body("OK");
+	}
+
+	@PatchMapping()
+	@Operation(summary = "게시글 편집 API")
+	public ResponseEntity<Object> editPost(@ValidatedUser User user,
+		@Valid @RequestBody EditPostRequest request, Errors errors){
+		if(errors.hasErrors())
+			throw new RequestException("게시글 수정 요청이 올바르지 않습니다.", errors);
+		postService.editPost(user,request);
 		return ResponseEntity.ok().body("OK");
 	}
 

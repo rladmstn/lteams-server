@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.lck.server.enumerate.Team;
 import com.lck.server.post.domain.Post;
 import com.lck.server.post.dto.CreatePostRequest;
+import com.lck.server.post.dto.EditPostRequest;
 import com.lck.server.post.dto.GetPostResponse;
 import com.lck.server.post.exception.PostValidationException;
 import com.lck.server.post.repository.PostRepository;
@@ -33,6 +34,19 @@ public class PostService {
 		List<GetPostResponse> result = postRepository.findAllByTeam(team);
 		log.info("success to get post list");
 		return result;
+	}
+
+	public void editPost(User user, EditPostRequest request){
+		Post post = postRepository.findById(request.postId())
+			.orElseThrow(() -> new PostValidationException("존재하지 않는 게시글 입니다."));
+		checkUserPermission(user,post,"edit");
+
+		if(request.title() != null && !request.title().isBlank())
+			post.editTitle(request.title());
+		if(request.content() != null && !request.content().isBlank())
+			post.editContent(request.content());
+
+		log.info("success to edit post");
 	}
 
 	public void updatePostHitCount(Long postId) {
