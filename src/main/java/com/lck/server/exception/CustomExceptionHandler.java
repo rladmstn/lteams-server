@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.lck.server.post.exception.PostValidationException;
+import com.lck.server.subscribe.exception.SubscribeValidationException;
 import com.lck.server.user.exception.UserPermissionException;
 import com.lck.server.user.exception.UserValidationException;
 
@@ -26,6 +27,10 @@ public class CustomExceptionHandler {
 	}
 	@ExceptionHandler(PostValidationException.class)
 	protected ResponseEntity<Object> handler(PostValidationException e){
+		return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getError(), null));
+	}
+	@ExceptionHandler(SubscribeValidationException.class)
+	protected ResponseEntity<Object> handler(SubscribeValidationException e){
 		return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getError(), null));
 	}
 }

@@ -34,7 +34,6 @@ public class Subscribe {
 	private Team team;
 
 	@Builder
-
 	public Subscribe(User user, LocalDateTime subscribedDate, Boolean permission, Integer subscriptionOrder,
 		Team team) {
 		this.user = user;

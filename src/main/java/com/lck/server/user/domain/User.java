@@ -48,8 +48,8 @@ public class User {
 	public void editNickname(String nickname){
 		this.nickname = nickname;
 	}
-
 	public void editProfileImage(String profileImage){
 		this.profileImage = profileImage;
 	}
+	public void updateSubscribedTeamCount(Integer cnt){ this.subscribedTeamCount += cnt; }
 }
