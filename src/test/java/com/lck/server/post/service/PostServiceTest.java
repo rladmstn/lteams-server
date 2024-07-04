@@ -134,4 +134,50 @@ class PostServiceTest {
 			.isInstanceOf(UserValidationException.class)
 			.hasFieldOrPropertyWithValue("error","게시글에 대한 edit 권한이 없습니다.");
 	}
+
+	@Test
+	@DisplayName("게시글 삭제 성공")
+	void deletePost(){
+		// given
+		when(postRepository.findById(anyLong())).thenReturn(Optional.ofNullable(post));
+		// when
+		postService.deletePost(user, 1L);
+		// then
+		verify(postRepository,times(1)).delete(post);
+	}
+
+	@Test
+	@DisplayName("게시글 삭제 실패 : 존재하지 않는 게시글")
+	void deletePostFailedPostValidationException(){
+		// given
+		when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
+		// when, then
+		assertThatThrownBy(() -> postService.deletePost(user, 1L))
+			.isInstanceOf(PostValidationException.class)
+			.hasFieldOrPropertyWithValue("error","존재하지 않는 게시글 입니다.");
+	}
+
+	@Test
+	@DisplayName("게시글 삭제 실패 : 사용자 권한 없음")
+	void deletePostFailedUserValidationException(){
+		// given
+		when(postRepository.findById(anyLong())).thenReturn(Optional.ofNullable(post));
+		// when, then
+		assertThatThrownBy(() -> postService.deletePost(diffUser, 1L))
+			.isInstanceOf(UserValidationException.class)
+			.hasFieldOrPropertyWithValue("error","게시글에 대한 delete 권한이 없습니다.");
+	}
+
+	@Test
+	@DisplayName("게시글 조회수 업데이트")
+	void updatePostHitCount(){
+		// given
+		when(postRepository.findById(anyLong())).thenReturn(Optional.ofNullable(post));
+		// when
+		postService.updatePostHitCount(1L);
+		// then
+		assertThat(post.getHitCount()).isEqualTo(1);
+	}
+
+
 }
