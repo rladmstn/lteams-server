@@ -51,5 +51,5 @@ public class User {
 	public void editProfileImage(String profileImage){
 		this.profileImage = profileImage;
 	}
-	public void updateSubscribedTeamCount(Integer cnt){ this.subscribedTeamCount += cnt; }
+	public void updateSubscribedTeamCount(Integer subscribedTeamCount){ this.subscribedTeamCount = subscribedTeamCount; }
 }
