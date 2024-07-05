@@ -3,6 +3,7 @@ package com.lck.server.subscribe.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,13 @@ public class SubscribeController {
 	public ResponseEntity<List<GetSubscribeResponse>> getSubscribedTeamList(@ValidatedUser User user){
 		List<GetSubscribeResponse> response = subscribeService.getSubscribedTeamList(user);
 		return ResponseEntity.ok().body(response);
+	}
+
+	@DeleteMapping
+	@Operation(summary = "팀 구독 취소 API")
+	public ResponseEntity<Object> unsubscribeTeam(@ValidatedUser User user, @RequestParam Long subscribeId){
+		subscribeService.unsubscribeTeam(user, subscribeId);
+		return ResponseEntity.ok().body("OK");
 	}
 
 }

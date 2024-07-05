@@ -8,7 +8,7 @@ import com.lck.server.enumerate.Team;
 import com.lck.server.subscribe.domain.Subscribe;
 import com.lck.server.user.domain.User;
 
-public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
+public interface SubscribeRepository extends JpaRepository<Subscribe, Long>, SubscribeCustomRepository {
 	boolean existsByUserAndTeam(User user, Team team);
 	List<Subscribe> findAllByUser(User user);
 }

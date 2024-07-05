@@ -42,4 +42,8 @@ public class Subscribe {
 		this.subscriptionOrder = subscriptionOrder;
 		this.team = team;
 	}
+
+	public void updateSubscriptionOrder(){
+		this.subscriptionOrder--;
+	}
 }

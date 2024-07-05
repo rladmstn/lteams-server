@@ -11,6 +11,7 @@ import com.lck.server.subscribe.dto.GetSubscribeResponse;
 import com.lck.server.subscribe.exception.SubscribeValidationException;
 import com.lck.server.subscribe.repository.SubscribeRepository;
 import com.lck.server.user.domain.User;
+import com.lck.server.user.exception.UserValidationException;
 import com.lck.server.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,5 +45,21 @@ public class SubscribeService {
 		List<GetSubscribeResponse> result = subscribes.stream().map(GetSubscribeResponse::toDTO).toList();
 		log.info("success to get subscribed team list");
 		return result;
+	}
+
+	public void unsubscribeTeam(User targetUser, Long subscribeId) {
+		User user = userRepository.findById(targetUser.getId()).orElseThrow();
+		Subscribe subscribe = subscribeRepository.findById(subscribeId)
+			.orElseThrow(() -> new SubscribeValidationException("이미 구독하지 않은 팀 입니다."));
+
+		if(!user.getId().equals(subscribe.getUser().getId()))
+			throw new UserValidationException("구독 취소에 대한 권한이 없습니다.");
+
+		List<Subscribe> subscribes = subscribeRepository.findListGreaterThanOrder(user,subscribe.getSubscriptionOrder());
+		subscribes.forEach(Subscribe::updateSubscriptionOrder);
+
+		subscribeRepository.delete(subscribe);
+		user.updateSubscribedTeamCount(user.getSubscribedTeamCount()-1);
+		log.info("success to unsubscribe team");
 	}
 }
