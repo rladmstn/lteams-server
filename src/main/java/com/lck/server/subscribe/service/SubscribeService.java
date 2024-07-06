@@ -1,8 +1,8 @@
 package com.lck.server.subscribe.service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.lck.server.enumerate.Team;
@@ -61,5 +61,12 @@ public class SubscribeService {
 		subscribeRepository.delete(subscribe);
 		user.updateSubscribedTeamCount(user.getSubscribedTeamCount()-1);
 		log.info("success to unsubscribe team");
+	}
+
+	@Scheduled(cron = "0 0/1 * * * *")
+	public void checkSubscribePermission(){
+		List<Subscribe> subscribes = subscribeRepository.findAfterPermissionDate(LocalDateTime.now());
+		for(Subscribe subscribe : subscribes)
+			subscribe.grantPermission();
 	}
 }

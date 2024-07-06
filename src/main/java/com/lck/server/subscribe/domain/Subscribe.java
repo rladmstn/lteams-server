@@ -46,4 +46,8 @@ public class Subscribe {
 	public void updateSubscriptionOrder(){
 		this.subscriptionOrder--;
 	}
+
+	public void grantPermission(){
+		this.permission = true;
+	}
 }
